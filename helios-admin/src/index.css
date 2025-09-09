@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("../public/fonts/NanumSquareOTF_acEB.otf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("../public/fonts/NanumSquareOTF_acB.otf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("../public/fonts/NanumSquareOTF_acR.otf");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "NanumSquare";
+  src: url("../public/fonts/NanumSquareOTF_acL.otf");
+  font-weight: 400;
+}
+
+body {
+  font-family: "NanumSquare", sans-serif;
+  overflow: scroll;
+}
+
+/* html,
+body {
+  min-width: 1024px;
+} */
