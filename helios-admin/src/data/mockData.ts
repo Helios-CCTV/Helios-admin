@@ -7,6 +7,7 @@ import type {
   CCTVCamera,
   CCTVStats,
   RoadCCTVStatus,
+  RoadDamage,
 } from "../types";
 
 // Mock API Status Data
@@ -324,5 +325,44 @@ export const mockRoadCCTVStatus: RoadCCTVStatus[] = [
     criticalDamageCount: 1,
     lastIncident: new Date(Date.now() - 8 * 60 * 60 * 1000),
     status: "normal",
+  },
+];
+
+export const mockRoadDamages: RoadDamage[] = [
+  {
+    damageName: "반사균열",
+  },
+  {
+    damageName: "세로방향균열",
+  },
+  {
+    damageName: "밀림균열",
+  },
+  {
+    damageName: "러팅",
+  },
+  {
+    damageName: "코루게이션및쇼빙",
+  },
+  {
+    damageName: "함몰",
+  },
+  {
+    damageName: "포트홀",
+  },
+  {
+    damageName: "라벨링",
+  },
+  {
+    damageName: "박리",
+  },
+  {
+    damageName: "단부균열",
+  },
+  {
+    damageName: "시공균열",
+  },
+  {
+    damageName: "거북등",
   },
 ];

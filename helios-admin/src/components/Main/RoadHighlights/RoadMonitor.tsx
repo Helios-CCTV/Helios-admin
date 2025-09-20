@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import type { CCTVCamera, CCTVStats, RoadCCTVStatus } from "../../../types";
 import {
-  mockCCTVCameras,
   mockCCTVStats,
   mockRoadCCTVStatus,
+  mockRoadDamages,
 } from "../../../data/mockData";
 
 // [컴포넌트] 개별 CCTV의 연결 상태를 뱃지로 보여주는 UI (온라인/오프라인/점검/오류)
@@ -64,8 +64,6 @@ const CCTVStatusBadge: React.FC<{ status: CCTVCamera["status"] }> = ({
 
 // [컴포넌트] 도로별 CCTV 집계 카드. 온라인 비율/파손 신고/마지막 사고 등 표시
 const RoadStatusCard: React.FC<{ road: RoadCCTVStatus }> = ({ road }) => {
-
-
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200">
       <div className="flex items-start justify-between mb-4">
@@ -183,11 +181,7 @@ const CCTVMonitor: React.FC = () => {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           도로별 CCTV 및 파손 현황
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {roadStatus.map((road) => (
-            <RoadStatusCard key={road.roadName} road={road} />
-          ))}
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
     </div>
   );

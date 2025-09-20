@@ -138,3 +138,7 @@ export interface RoadCCTVStatus {
   lastIncident?: Date;
   status: "normal" | "warning" | "critical";
 }
+
+export interface RoadDamage {
+  damageName: string;
+}
