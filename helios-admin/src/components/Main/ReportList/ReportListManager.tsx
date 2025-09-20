@@ -281,9 +281,6 @@ const ReportListManager: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <div className="flex gap-2">
-                      <button className="text-blue-600 hover:text-blue-800 font-medium">
-                        상세
-                      </button>
                       <button className="text-green-600 hover:text-green-800 font-medium">
                         처리
                       </button>
