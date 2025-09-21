@@ -1,3 +1,5 @@
+
+
 import type {
   ApiStatus,
   DamageReport,
@@ -14,7 +16,7 @@ import type {
 export const mockApiStatuses: ApiStatus[] = [
   {
     id: "api-1",
-    name: "CCTV 모니터링 API",
+    name: "CCTV 조회 API",
     status: "active",
     responseTime: 120,
     uptime: 99.9,
@@ -22,7 +24,7 @@ export const mockApiStatuses: ApiStatus[] = [
   },
   {
     id: "api-2",
-    name: "신고 접수 API",
+    name: "분석 결과 API",
     status: "active",
     responseTime: 85,
     uptime: 99.8,
@@ -30,7 +32,7 @@ export const mockApiStatuses: ApiStatus[] = [
   },
   {
     id: "api-3",
-    name: "데이터 분석 API",
+    name: "파손 결과 API",
     status: "warning",
     responseTime: 350,
     uptime: 98.5,
@@ -38,7 +40,7 @@ export const mockApiStatuses: ApiStatus[] = [
   },
   {
     id: "api-4",
-    name: "알림 서비스 API",
+    name: "신고 API",
     status: "active",
     responseTime: 95,
     uptime: 99.7,
