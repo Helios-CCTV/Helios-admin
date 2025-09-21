@@ -33,3 +33,14 @@ export async function fetchReportTiming() {
     return duringTime;
   }
 }
+
+export async function fetchReportData() {
+  try {
+    const response = await axios.get<APIResponse>(
+      `${API_BASE_URL}report/get-all`
+    );
+    return response;
+  } catch (error) {
+    console.error("신고 API 요청 실패:", error);
+  }
+}
