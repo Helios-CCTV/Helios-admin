@@ -1,10 +1,18 @@
+/**
+ * 관리자 대시보드의 "사용자 신고 현황" 섹션입니다.
+ * - mockReports(모의 데이터)를 불러와 통계 카드 + 신고 리스트 테이블을 렌더링합니다.
+ */
 import React, { useState } from "react";
 import type { Report } from "../../../types";
 import { mockReports } from "../../../data/mockData";
 
+// 우선순위 아이콘/라벨 컴포넌트
+// - Report.priority 값(urgent/high/medium/low)에 따라 색상과 이모지가 달라집니다.
+// - 테이블의 "우선순위" 컬럼에서 재사용합니다.
 const PriorityIcon: React.FC<{ priority: Report["priority"] }> = ({
   priority,
 }) => {
+  // priority 값별로 색상/아이콘 매핑
   const getConfig = (priority: Report["priority"]) => {
     switch (priority) {
       case "urgent":
@@ -38,7 +46,10 @@ const PriorityIcon: React.FC<{ priority: Report["priority"] }> = ({
   );
 };
 
+// 처리 상태 뱃지 컴포넌트
+// - Report.status 값(pending/assigned/in_progress/resolved/closed)에 따라 배경/텍스트 컬러와 라벨이 달라집니다.
 const StatusBadge: React.FC<{ status: Report["status"] }> = ({ status }) => {
+  // status 값별 스타일/라벨 매핑
   const getStatusConfig = (status: Report["status"]) => {
     switch (status) {
       case "pending":
@@ -75,7 +86,10 @@ const StatusBadge: React.FC<{ status: Report["status"] }> = ({ status }) => {
   );
 };
 
+// 신고 유형 아이콘/라벨 컴포넌트
+// - Report.type 값(damage/accident/maintenance/emergency/기타)에 따라 아이콘/색상이 달라집니다.
 const TypeIcon: React.FC<{ type: Report["type"] }> = ({ type }) => {
+  // type 값별 아이콘/라벨/색상 매핑
   const getTypeConfig = (type: Report["type"]) => {
     switch (type) {
       case "damage":
@@ -101,11 +115,17 @@ const TypeIcon: React.FC<{ type: Report["type"] }> = ({ type }) => {
   );
 };
 
+// 메인 컨테이너 컴포넌트
+// - 상단 통계 카드 4개 + 신고 리스트 테이블을 구성합니다.
 const ReportListManager: React.FC = () => {
   const [reports] = useState<Report[]>(mockReports);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedPriority, setSelectedPriority] = useState<string>("all");
 
+  // reports: 화면에 표시할 신고 데이터(모의 데이터). 실제 연동 시 서버 응답으로 대체.
+  // selectedStatus/selectedPriority: 필터링 상태(현재는 UI 미노출, 내부 필터 로직만 유지)
+
+  // 선택된 상태/우선순위에 맞춰 리스트를 필터링
   const getFilteredReports = () => {
     return reports.filter((report) => {
       const statusMatch =
@@ -118,6 +138,8 @@ const ReportListManager: React.FC = () => {
 
   const filteredReports = getFilteredReports();
 
+  // 상단 통계 카드에 들어갈 값 계산
+  // - 총 신고, 대기중, 진행중(배정+진행), 완료(해결+완료)
   const getStatsCards = () => {
     return [
       {
@@ -151,6 +173,7 @@ const ReportListManager: React.FC = () => {
     ];
   };
 
+  // "방금 전/분 전/시간 전/일 전" 형태로 상대 시각을 계산해 표시
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -167,6 +190,7 @@ const ReportListManager: React.FC = () => {
   const statsCards = getStatsCards();
 
   return (
+    // 페이지 전체 컨테이너: 그라디언트 배경 + 라운딩
     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -177,9 +201,10 @@ const ReportListManager: React.FC = () => {
         </p>
       </div>
 
-      {/* 통계 카드 */}
+      {/* 통계 카드 4칸: 총 신고/대기중/진행중/완료 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {statsCards.map((card, index) => {
+          // 카드 색상 테마 매핑(텍스트/배경)
           const colorClasses = {
             blue: "bg-blue-50 text-blue-700",
             gray: "bg-gray-50 text-gray-700",
@@ -212,7 +237,7 @@ const ReportListManager: React.FC = () => {
         })}
       </div>
 
-      {/* 신고 목록 */}
+      {/* 신고 리스트 테이블 */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">
@@ -222,6 +247,7 @@ const ReportListManager: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full">
+            {/* 헤더: 컬럼명 */}
             <thead className="bg-gray-50">
               <tr>
                 <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
@@ -250,6 +276,7 @@ const ReportListManager: React.FC = () => {
                 </th>
               </tr>
             </thead>
+            {/* 바디: 필터 조건에 맞는 신고만 표시 */}
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredReports.map((report) => (
                 <tr key={report.id} className="hover:bg-gray-50">
@@ -292,6 +319,7 @@ const ReportListManager: React.FC = () => {
           </table>
         </div>
 
+        {/* 빈 상태: 필터 결과가 없을 때 안내 */}
         {filteredReports.length === 0 && (
           <div className="text-center py-8 text-gray-500">
             조건에 맞는 신고가 없습니다.
