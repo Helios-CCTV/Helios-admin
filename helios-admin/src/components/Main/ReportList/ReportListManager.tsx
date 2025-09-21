@@ -300,12 +300,7 @@ const ReportListManager: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <StatusBadge status={report.status} />
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {report.assignedTo || "-"}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {formatTime(report.createdAt)}
-                  </td>
+
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <div className="flex gap-2">
                       <button className="text-green-600 hover:text-green-800 font-medium">

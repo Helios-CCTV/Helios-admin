@@ -1,57 +1,10 @@
 import React from "react";
-import type { ApiStatus } from "../../../types";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchCCTVTiming } from "../../../API/getCCTVLive";
 import { fetchAnalyzeTiming } from "../../../API/getAnalyze";
 import { fetchDetectionTiming } from "../../../API/getDetection";
 import { fetchReportTiming } from "../../../API/getReport";
-
-function StatusIndicator({ status }: { status: ApiStatus["status"] }) {
-  const getStatusConfig = (status: ApiStatus["status"]) => {
-    switch (status) {
-      case "active":
-        return {
-          color: "bg-green-500",
-          text: "정상",
-          textColor: "text-green-700",
-        };
-      case "warning":
-        return {
-          color: "bg-yellow-500",
-          text: "경고",
-          textColor: "text-yellow-700",
-        };
-      case "error":
-        return { color: "bg-red-500", text: "오류", textColor: "text-red-700" };
-      case "maintenance":
-        return {
-          color: "bg-gray-500",
-          text: "점검중",
-          textColor: "text-gray-700",
-        };
-      default:
-        return {
-          color: "bg-gray-500",
-          text: "알 수 없음",
-          textColor: "text-gray-700",
-        };
-    }
-  };
-
-  const config = getStatusConfig(status);
-
-  return (
-    <div className="flex items-center gap-2">
-      <div
-        className={`w-3 h-3 rounded-full ${config.color} animate-pulse`}
-      ></div>
-      <span className={`text-sm font-medium ${config.textColor}`}>
-        {config.text}
-      </span>
-    </div>
-  );
-}
 
 // 단일 API 상태 카드
 // - title: 카드 제목 (예: "CCTV API")
@@ -86,25 +39,25 @@ const ApiStatusMonitor: React.FC = () => {
   const { data: cctvTimeMs } = useQuery({
     queryKey: ["cctvTime"],
     queryFn: fetchCCTVTiming,
-    refetchInterval: 30000,
+    // refetchInterval: 30000,
   });
 
   const { data: analyzeTimeMs } = useQuery({
     queryKey: ["analyzeTime"],
     queryFn: fetchAnalyzeTiming,
-    refetchInterval: 30000,
+    // refetchInterval: 30000,
   });
 
   const { data: detectionTimeMs } = useQuery({
     queryKey: ["detectionTime"],
     queryFn: fetchDetectionTiming,
-    refetchInterval: 30000,
+    // refetchInterval: 30000,
   });
 
   const { data: reportTimeMs } = useQuery({
     queryKey: ["reportTime"],
     queryFn: fetchReportTiming,
-    refetchInterval: 30000,
+    // refetchInterval: 30000,
   });
 
   return (

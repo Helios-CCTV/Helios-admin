@@ -33,3 +33,16 @@ export async function fetchDetectionTiming() {
     return duringTime;
   }
 }
+
+export async function fetchDetectionData() {
+  try {
+    const response = await axios.get<APIResponse>(
+      `${API_BASE_URL}analyze/get-detected`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("파손 API 요청 실패:", error);
+    return [];
+  }
+}

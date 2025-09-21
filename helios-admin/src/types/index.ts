@@ -1,3 +1,4 @@
+import { mockRoadDamages } from "./../data/mockData";
 // API 상태 관련 타입
 export interface ApiStatus {
   id: string;
@@ -11,15 +12,11 @@ export interface ApiStatus {
 // 파손 보고서 관련 타입
 export interface DamageReport {
   id: string;
-  location: string;
-  type: "pothole" | "crack" | "sign_damage" | "lighting" | "barrier";
-  severity: "low" | "medium" | "high" | "critical";
-  status: "reported" | "in_progress" | "completed" | "verified";
-  reportedAt: Date;
-  estimatedRepairTime: number;
-  assignedTo?: string;
-  images?: string[];
-  description: string;
+  cctvName: string;
+  cctvUrl: string;
+  analyzeId: number;
+  date: string;
+  detections: string[];
 }
 
 // 신고 접수 관련 타입
@@ -32,10 +29,6 @@ export interface Report {
   contactInfo: string;
   description: string;
   status: "pending" | "assigned" | "in_progress" | "resolved" | "closed";
-  createdAt: Date;
-  updatedAt: Date;
-  assignedTo?: string;
-  attachments?: string[];
 }
 
 // 도로 하이라이트 관련 타입

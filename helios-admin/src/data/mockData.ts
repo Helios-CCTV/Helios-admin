@@ -1,5 +1,3 @@
-
-
 import type {
   ApiStatus,
   DamageReport,
@@ -57,8 +55,7 @@ export const mockDamageReports: DamageReport[] = [
     severity: "high",
     status: "in_progress",
     reportedAt: new Date("2024-12-19T09:30:00"),
-    estimatedRepairTime: 4,
-    assignedTo: "김현수",
+
     description: "차로 중앙 부근 대형 포트홀 발견, 즉시 수리 필요",
   },
   {
@@ -68,7 +65,6 @@ export const mockDamageReports: DamageReport[] = [
     severity: "medium",
     status: "reported",
     reportedAt: new Date("2024-12-19T14:15:00"),
-    estimatedRepairTime: 2,
     description: "도로 표지판 일부 손상",
   },
   {
@@ -78,8 +74,7 @@ export const mockDamageReports: DamageReport[] = [
     severity: "critical",
     status: "completed",
     reportedAt: new Date("2024-12-18T22:00:00"),
-    estimatedRepairTime: 6,
-    assignedTo: "박지영",
+
     description: "터널 조명 시설 고장으로 시야 확보 어려움",
   },
 ];
@@ -95,9 +90,6 @@ export const mockReports: Report[] = [
     contactInfo: "010-1234-5678",
     description: "도로에 큰 구멍이 있어서 차량 통행에 위험합니다.",
     status: "in_progress",
-    createdAt: new Date("2024-12-19T09:25:00"),
-    updatedAt: new Date("2024-12-19T10:30:00"),
-    assignedTo: "김현수",
   },
   {
     id: "report-2",
@@ -108,9 +100,6 @@ export const mockReports: Report[] = [
     contactInfo: "010-9876-5432",
     description: "2중 추돌사고 발생, 구급차 및 견인차 필요",
     status: "assigned",
-    createdAt: new Date("2024-12-19T15:45:00"),
-    updatedAt: new Date("2024-12-19T15:50:00"),
-    assignedTo: "응급팀",
   },
   {
     id: "report-3",
@@ -121,8 +110,6 @@ export const mockReports: Report[] = [
     contactInfo: "010-5555-7777",
     description: "가로등이 깜빡거려서 야간 운전시 불편합니다.",
     status: "pending",
-    createdAt: new Date("2024-12-19T18:20:00"),
-    updatedAt: new Date("2024-12-19T18:20:00"),
   },
 ];
 
