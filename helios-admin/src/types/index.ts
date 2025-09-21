@@ -141,4 +141,5 @@ export interface RoadCCTVStatus {
 
 export interface RoadDamage {
   damageName: string;
+  countDamage: number;
 }

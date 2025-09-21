@@ -161,14 +161,6 @@ export default function SystemInfoSidebar() {
           </div>
         </div>
       </div>
-
-      {/* 로그아웃 버튼 */}
-      <div className="p-4 border-t border-gray-200">
-        <button className="w-full flex items-center justify-center gap-2 p-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors duration-200">
-          <span>🚪</span>
-          <span className="font-medium">로그아웃</span>
-        </button>
-      </div>
     </div>
   );
 }

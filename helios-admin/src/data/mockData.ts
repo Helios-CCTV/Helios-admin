@@ -331,38 +331,50 @@ export const mockRoadCCTVStatus: RoadCCTVStatus[] = [
 export const mockRoadDamages: RoadDamage[] = [
   {
     damageName: "반사균열",
+    countDamage: 5,
   },
   {
     damageName: "세로방향균열",
+    countDamage: 3,
   },
   {
     damageName: "밀림균열",
+    countDamage: 2,
   },
   {
     damageName: "러팅",
+    countDamage: 4,
   },
   {
     damageName: "코루게이션및쇼빙",
+    countDamage: 6,
   },
   {
     damageName: "함몰",
+    countDamage: 1,
   },
   {
     damageName: "포트홀",
+    countDamage: 3,
   },
   {
     damageName: "라벨링",
+    countDamage: 2,
   },
   {
     damageName: "박리",
+    countDamage: 0,
   },
   {
     damageName: "단부균열",
+    countDamage: 0,
   },
   {
     damageName: "시공균열",
+    countDamage: 0,
   },
   {
     damageName: "거북등",
+    countDamage: 0,
   },
 ];

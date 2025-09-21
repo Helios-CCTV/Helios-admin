@@ -111,7 +111,7 @@ const CCTVMonitor: React.FC = () => {
   const [cctvStats, setCctvStats] = useState<CCTVStats>(mockCCTVStats);
 
   const [roadStatus] = useState<RoadCCTVStatus[]>(mockRoadCCTVStatus);
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -181,7 +181,23 @@ const CCTVMonitor: React.FC = () => {
         <h3 className="text-lg font-semibold text-gray-900 mb-4">
           도로별 CCTV 및 파손 현황
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {mockRoadDamages.map((damage, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all"
+            >
+              <div className="flex items-center justify-between">
+                <div className="text-base font-semibold text-gray-800">
+                  {damage.damageName}
+                </div>
+                <span className="text-base font-semibold text-gray-800">
+                  {damage.countDamage}개
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
