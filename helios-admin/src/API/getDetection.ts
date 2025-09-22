@@ -40,7 +40,7 @@ export async function fetchDetectionData() {
       `${API_BASE_URL}analyze/get-detected`
     );
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.error("파손 API 요청 실패:", error);
     return [];

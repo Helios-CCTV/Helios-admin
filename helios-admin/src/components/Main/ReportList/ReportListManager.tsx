@@ -70,12 +70,9 @@ const ReportListManager: React.FC = () => {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["reports"],
     queryFn: fetchReportData,
-    refetchOnWindowFocus: false,
+    refetchInterval: false,
   });
-
-  // 응답 파싱: axios Response → response.data.data (배열)
-  const reports: ReportItem[] = (data as any)?.data?.data ?? [];
-
+  const reports: ReportItem[] = data || [];
   // 상단 통계 (실데이터 기준)
   const statsCards = [
     { title: "총 신고", value: reports.length },
@@ -108,14 +105,6 @@ const ReportListManager: React.FC = () => {
       {/* 통계 카드 4칸: 총 신고/미확인/확인됨/고우선 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {statsCards.map((card, index) => {
-          // 카드 색상 테마 매핑(텍스트/배경)
-          const colorClasses = {
-            blue: "bg-blue-50 text-blue-700",
-            gray: "bg-gray-50 text-gray-700",
-            yellow: "bg-yellow-50 text-yellow-700",
-            green: "bg-green-50 text-green-700",
-          };
-
           return (
             <div
               key={index}

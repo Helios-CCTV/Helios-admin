@@ -39,8 +39,12 @@ export async function fetchReportData() {
     const response = await axios.get<APIResponse>(
       `${API_BASE_URL}report/get-all`
     );
-    return response;
+    console.log("신고 API 응답:", response);
+    return Array.isArray((response as any)?.data?.data)
+      ? (response as any).data.data
+      : [];
   } catch (error) {
     console.error("신고 API 요청 실패:", error);
+    return [];
   }
 }

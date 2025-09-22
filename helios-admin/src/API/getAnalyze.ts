@@ -33,3 +33,17 @@ export async function fetchAnalyzeTiming() {
     return duringTime;
   }
 }
+
+export async function fetchAnalyzeData() {
+  try {
+    const response = await axios.get<APIResponse>(
+      `${API_BASE_URL}analyze/get-analyze`
+    );
+
+    console.log("분석 데이터:", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.error("분석 API 요청 실패:", error);
+    return [];
+  }
+}

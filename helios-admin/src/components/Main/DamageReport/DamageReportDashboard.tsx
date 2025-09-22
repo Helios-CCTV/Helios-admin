@@ -90,13 +90,7 @@ const DamageReportDashboard: React.FC = () => {
     refetchOnWindowFocus: false, // 윈도우 포커스 시 재요청 비활성화
   });
 
-  // API 응답 형태가 두 가지일 수 있으므로 유연하게 처리
-  //  1) { success, code, message, data: DamageReport[] }
-  //  2) DamageReport[]
-  // 배열이면 그대로 사용, 아니면 data 프로퍼티에서 추출, 없으면 빈 배열
-  const reports: DamageReport[] = Array.isArray(data)
-    ? (data as DamageReport[])
-    : (data as any)?.data ?? [];
+  const reports: DamageReport[] = data || [];
 
   // 모든 파손 라벨(detections[])을 펼쳐서 라벨별로 몇 번 나왔는지 집계
   const labelCounts = new Map<string, number>();
