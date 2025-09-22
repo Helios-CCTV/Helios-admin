@@ -1,116 +1,64 @@
 /**
- * 관리자 대시보드의 "사용자 신고 현황" 섹션입니다.
- * - mockReports(모의 데이터)를 불러와 통계 카드 + 신고 리스트 테이블을 렌더링합니다.
+ * 관리자 대시보드의 "사용자 신고 현황" 섹션 (실데이터 연동)
+ * - 더미(mock) 제거, 실제 API(getReport.ts)로부터 데이터를 받아 렌더링합니다.
  */
-import React, { useState } from "react";
-import type { Report } from "../../../types";
-import { mockReports } from "../../../data/mockData";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchReportData } from "../../../API/getReport";
 
-// 우선순위 아이콘/라벨 컴포넌트
-// - Report.priority 값(urgent/high/medium/low)에 따라 색상과 이모지가 달라집니다.
-// - 테이블의 "우선순위" 컬럼에서 재사용합니다.
-const PriorityIcon: React.FC<{ priority: Report["priority"] }> = ({
-  priority,
-}) => {
-  // priority 값별로 색상/아이콘 매핑
-  const getConfig = (priority: Report["priority"]) => {
-    switch (priority) {
-      case "urgent":
-        return { color: "text-red-500", icon: "🚨" };
-      case "high":
-        return { color: "text-orange-500", icon: "⚠️" };
-      case "medium":
-        return { color: "text-yellow-500", icon: "📋" };
-      case "low":
-        return { color: "text-green-500", icon: "📝" };
-      default:
-        return { color: "text-gray-500", icon: "📄" };
-    }
+// 신고 API 단일 항목 타입 (서버 응답 스키마에 맞춤)
+interface ReportItem {
+  id: number;
+  location: string;
+  severity: number; // 1~3 등급 가정
+  damageType: string; // ex) POTHOLE, CRACK ...
+  isChecked: boolean; // 확인/처리 여부
+}
+
+// 우선순위 배지 (서버 severity 숫자 기반)
+const PriorityIcon: React.FC<{ severity: number }> = ({ severity }) => {
+  // severity 숫자에 따른 등급/색상 라벨링 (임계값은 정책에 맞춰 조정)
+  const getConfig = (s: number) => {
+    if (s >= 3) return { color: "text-red-500", label: "긴급" };
+    if (s === 2) return { color: "text-orange-500", label: "높음" };
+    return { color: "text-green-600", label: "보통" };
   };
-
-  const config = getConfig(priority);
-
+  const cfg = getConfig(severity);
   return (
-    <div className={`flex items-center gap-1 ${config.color}`}>
-      <span>{config.icon}</span>
-      <span className="text-sm font-medium capitalize">
-        {priority === "urgent"
-          ? "긴급"
-          : priority === "high"
-          ? "높음"
-          : priority === "medium"
-          ? "보통"
-          : "낮음"}
-      </span>
+    <div className={`flex items-center gap-1 ${cfg.color}`}>
+      <span className="text-sm font-medium">{cfg.label}</span>
     </div>
   );
 };
 
-// 처리 상태 뱃지 컴포넌트
-// - Report.status 값(pending/assigned/in_progress/resolved/closed)에 따라 배경/텍스트 컬러와 라벨이 달라집니다.
-const StatusBadge: React.FC<{ status: Report["status"] }> = ({ status }) => {
-  // status 값별 스타일/라벨 매핑
-  const getStatusConfig = (status: Report["status"]) => {
-    switch (status) {
-      case "pending":
-        return { bg: "bg-gray-100", text: "text-gray-800", label: "대기중" };
-      case "assigned":
-        return { bg: "bg-blue-100", text: "text-blue-800", label: "배정됨" };
-      case "in_progress":
-        return {
-          bg: "bg-yellow-100",
-          text: "text-yellow-800",
-          label: "진행중",
-        };
-      case "resolved":
-        return { bg: "bg-green-100", text: "text-green-800", label: "해결됨" };
-      case "closed":
-        return { bg: "bg-purple-100", text: "text-purple-800", label: "완료" };
-      default:
-        return {
-          bg: "bg-gray-100",
-          text: "text-gray-800",
-          label: "알 수 없음",
-        };
-    }
-  };
-
-  const config = getStatusConfig(status);
-
+// 확인 상태 뱃지 (isChecked 기반)
+const StatusBadge: React.FC<{ checked: boolean }> = ({ checked }) => {
+  const cfg = checked
+    ? { bg: "bg-green-100", text: "text-green-800", label: "확인됨" }
+    : { bg: "bg-gray-100", text: "text-gray-800", label: "미확인" };
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.bg} ${config.text}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${cfg.bg} ${cfg.text}`}
     >
-      {config.label}
+      {cfg.label}
     </span>
   );
 };
 
-// 신고 유형 아이콘/라벨 컴포넌트
-// - Report.type 값(damage/accident/maintenance/emergency/기타)에 따라 아이콘/색상이 달라집니다.
-const TypeIcon: React.FC<{ type: Report["type"] }> = ({ type }) => {
-  // type 값별 아이콘/라벨/색상 매핑
-  const getTypeConfig = (type: Report["type"]) => {
-    switch (type) {
-      case "damage":
-        return { icon: "🚧", label: "파손", color: "text-red-600" };
-      case "accident":
-        return { icon: "🚗", label: "사고", color: "text-orange-600" };
-      case "maintenance":
-        return { icon: "🔧", label: "정비", color: "text-blue-600" };
-      case "emergency":
-        return { icon: "🚨", label: "응급", color: "text-red-700" };
-      default:
-        return { icon: "📋", label: "기타", color: "text-gray-600" };
-    }
+// 신고 유형 아이콘 (damageType 문자열 기반)
+const TypeIcon: React.FC<{ damageType: string }> = ({ damageType }) => {
+  const t = (damageType || "").toUpperCase();
+  const getTypeConfig = (k: string) => {
+    if (k.includes("POTHOLE"))
+      return { label: "포트홀", color: "text-red-600" };
+    if (k.includes("CRACK")) return { label: "균열", color: "text-orange-600" };
+    if (k.includes("RUT")) return { label: "러팅", color: "text-yellow-600" };
+    return { label: damageType || "기타", color: "text-gray-600" };
   };
-
-  const config = getTypeConfig(type);
-
+  const cfg = getTypeConfig(t);
   return (
-    <div className={`flex items-center gap-1 ${config.color}`}>
-      <span>{config.icon}</span>
-      <span className="text-sm font-medium">{config.label}</span>
+    <div className={`flex items-center gap-1 ${cfg.color}`}>
+      <span className="text-sm font-medium">{cfg.label}</span>
     </div>
   );
 };
@@ -118,76 +66,29 @@ const TypeIcon: React.FC<{ type: Report["type"] }> = ({ type }) => {
 // 메인 컨테이너 컴포넌트
 // - 상단 통계 카드 4개 + 신고 리스트 테이블을 구성합니다.
 const ReportListManager: React.FC = () => {
-  const [reports] = useState<Report[]>(mockReports);
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  const [selectedPriority, setSelectedPriority] = useState<string>("all");
-
-  // reports: 화면에 표시할 신고 데이터(모의 데이터). 실제 연동 시 서버 응답으로 대체.
-  // selectedStatus/selectedPriority: 필터링 상태(현재는 UI 미노출, 내부 필터 로직만 유지)
-
-  // 선택된 상태/우선순위에 맞춰 리스트를 필터링
-  const getFilteredReports = () => {
-    return reports.filter((report) => {
-      const statusMatch =
-        selectedStatus === "all" || report.status === selectedStatus;
-      const priorityMatch =
-        selectedPriority === "all" || report.priority === selectedPriority;
-      return statusMatch && priorityMatch;
-    });
-  };
-
-  const filteredReports = getFilteredReports();
-
-  // 상단 통계 카드에 들어갈 값 계산
-  // - 총 신고, 대기중, 진행중(배정+진행), 완료(해결+완료)
-  const getStatsCards = () => {
-    return [
-      {
-        title: "총 신고",
-        value: reports.length,
-        color: "blue",
-        icon: "📋",
-      },
-      {
-        title: "대기중",
-        value: reports.filter((r) => r.status === "pending").length,
-        color: "gray",
-        icon: "⏳",
-      },
-      {
-        title: "진행중",
-        value: reports.filter(
-          (r) => r.status === "in_progress" || r.status === "assigned"
-        ).length,
-        color: "yellow",
-        icon: "🔄",
-      },
-      {
-        title: "완료",
-        value: reports.filter(
-          (r) => r.status === "resolved" || r.status === "closed"
-        ).length,
-        color: "green",
-        icon: "✅",
-      },
-    ];
-  };
-
-  // "방금 전/분 전/시간 전/일 전" 형태로 상대 시각을 계산해 표시
-  const formatTime = (date: Date) => {
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (days > 0) return `${days}일 전`;
-    if (hours > 0) return `${hours}시간 전`;
-    if (minutes > 0) return `${minutes}분 전`;
-    return "방금 전";
-  };
-
-  const statsCards = getStatsCards();
+  // 실데이터 로드
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["reports"],
+    queryFn: fetchReportData,
+    refetchInterval: false,
+  });
+  const reports: ReportItem[] = data || [];
+  // 상단 통계 (실데이터 기준)
+  const statsCards = [
+    { title: "총 신고", value: reports.length },
+    {
+      title: "미확인",
+      value: reports.filter((r) => !r.isChecked).length,
+    },
+    {
+      title: "확인됨",
+      value: reports.filter((r) => r.isChecked).length,
+    },
+    {
+      title: "위험",
+      value: reports.filter((r) => r.severity >= 3).length,
+    },
+  ];
 
   return (
     // 페이지 전체 컨테이너: 그라디언트 배경 + 라운딩
@@ -201,17 +102,9 @@ const ReportListManager: React.FC = () => {
         </p>
       </div>
 
-      {/* 통계 카드 4칸: 총 신고/대기중/진행중/완료 */}
+      {/* 통계 카드 4칸: 총 신고/미확인/확인됨/고우선 */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {statsCards.map((card, index) => {
-          // 카드 색상 테마 매핑(텍스트/배경)
-          const colorClasses = {
-            blue: "bg-blue-50 text-blue-700",
-            gray: "bg-gray-50 text-gray-700",
-            yellow: "bg-yellow-50 text-yellow-700",
-            green: "bg-green-50 text-green-700",
-          };
-
           return (
             <div
               key={index}
@@ -224,13 +117,6 @@ const ReportListManager: React.FC = () => {
                     {card.value}
                   </p>
                 </div>
-                <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                    colorClasses[card.color as keyof typeof colorClasses]
-                  }`}
-                >
-                  <span className="text-lg">{card.icon}</span>
-                </div>
               </div>
             </div>
           );
@@ -241,7 +127,7 @@ const ReportListManager: React.FC = () => {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">
-            신고 목록 ({filteredReports.length}건)
+            신고 목록 ({reports.length}건)
           </h3>
         </div>
 
@@ -257,74 +143,84 @@ const ReportListManager: React.FC = () => {
                   위치
                 </th>
                 <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
-                  신고자
-                </th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
                   우선순위
                 </th>
                 <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
                   상태
                 </th>
                 <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
-                  담당자
-                </th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
-                  접수시간
-                </th>
-                <th className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-3">
                   작업
                 </th>
               </tr>
             </thead>
-            {/* 바디: 필터 조건에 맞는 신고만 표시 */}
+            {/* 바디: 실데이터 렌더링 */}
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredReports.map((report) => (
-                <tr key={report.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <TypeIcon type={report.type} />
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {report.location}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-gray-900">
-                      {report.reporter}
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {report.contactInfo}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <PriorityIcon priority={report.priority} />
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <StatusBadge status={report.status} />
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    {report.assignedTo || "-"}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
-                    {formatTime(report.createdAt)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex gap-2">
-                      <button className="text-green-600 hover:text-green-800 font-medium">
-                        처리
-                      </button>
-                    </div>
+              {/* 로딩/에러 상태 */}
+              {isLoading && (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
+                    불러오는 중…
                   </td>
                 </tr>
-              ))}
+              )}
+              {isError && (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-8 text-center text-red-600"
+                  >
+                    불러오지 못했습니다.{" "}
+                    <button onClick={() => refetch()} className="underline">
+                      다시 시도
+                    </button>
+                  </td>
+                </tr>
+              )}
+
+              {/* 정상 데이터 */}
+              {!isLoading &&
+                !isError &&
+                reports.map((report) => (
+                  <tr key={report.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <TypeIcon damageType={report.damageType} />
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {report.location}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <PriorityIcon severity={report.severity} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <StatusBadge checked={report.isChecked} />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex gap-2">
+                        <button className="text-green-600 hover:text-green-800 font-medium">
+                          처리
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+              {/* 빈 상태 */}
+              {!isLoading && !isError && reports.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
+                    표시할 신고가 없습니다.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
-
-        {/* 빈 상태: 필터 결과가 없을 때 안내 */}
-        {filteredReports.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            조건에 맞는 신고가 없습니다.
-          </div>
-        )}
       </div>
     </div>
   );
