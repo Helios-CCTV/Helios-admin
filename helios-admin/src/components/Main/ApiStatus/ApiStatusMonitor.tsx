@@ -7,10 +7,6 @@ import { fetchDetectionTiming } from "../../../API/getDetection";
 import { fetchReportTiming } from "../../../API/getReport";
 
 // 단일 API 상태 카드
-// - title: 카드 제목 (예: "CCTV API")
-// - status: 현재 상태 (active | warning | error | maintenance)
-// - responseTime: 응답 시간(ms). 없으면 "-" 표시
-// - footer: 보조 텍스트(옵션)
 const ApiStatusCard: React.FC<{
   title: string;
   responseTime?: number | null;
@@ -39,25 +35,25 @@ const ApiStatusMonitor: React.FC = () => {
   const { data: cctvTimeMs } = useQuery({
     queryKey: ["cctvTime"],
     queryFn: fetchCCTVTiming,
-    // refetchInterval: 30000,
+    refetchInterval: 30000,
   });
 
   const { data: analyzeTimeMs } = useQuery({
     queryKey: ["analyzeTime"],
     queryFn: fetchAnalyzeTiming,
-    // refetchInterval: 30000,
+    refetchInterval: 30000,
   });
 
   const { data: detectionTimeMs } = useQuery({
     queryKey: ["detectionTime"],
     queryFn: fetchDetectionTiming,
-    // refetchInterval: 30000,
+    refetchInterval: 30000,
   });
 
   const { data: reportTimeMs } = useQuery({
     queryKey: ["reportTime"],
     queryFn: fetchReportTiming,
-    // refetchInterval: 30000,
+    refetchInterval: 30000,
   });
 
   return (
