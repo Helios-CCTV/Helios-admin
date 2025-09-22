@@ -1,8 +1,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAnalyzeData } from "../../../API/getAnalyze";
+
 // 서버에서 내려오는 항목 중 이 화면에서 사용하는 필드만 최소 정의
-// (정확한 공용 타입이 있다면 그 타입을 import해서 사용해도 됩니다)
 interface AnalyzeItem {
   detections?: string[] | null; // 파손 라벨 배열 (없을 수 있어 null/undefined 허용)
 }

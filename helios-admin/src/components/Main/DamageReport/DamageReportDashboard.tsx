@@ -1,17 +1,9 @@
-/**
- * DamageReportDashboard.tsx
- *
- * 도로 파손 현황 대시보드 (실데이터 연동 버전)
- */
 import React from "react";
 import type { DamageReport, ChartData } from "../../../types";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDetectionData } from "../../../API/getDetection";
 
-/**
- * DoughnutChart
- * 간단한 도넛 차트: data(라벨/값/색상)를 비율로 그려줍니다.
- */
+// 도넛 차트 컴포넌트
 const DoughnutChart: React.FC<{ data: ChartData[] }> = ({ data }) => {
   // 총합 계산: 모든 데이터 값의 합을 구함
   const total = data.reduce((sum, item) => sum + item.value, 0);
@@ -77,11 +69,7 @@ const DoughnutChart: React.FC<{ data: ChartData[] }> = ({ data }) => {
   );
 };
 
-/**
- * DamageReportDashboard
- * - 실제 API("analyze/get-detected")를 호출해 파손 결과를 표시합니다.
- * - 파손 라벨(detections[])을 집계해 유형별 통계를 만들고, 최근 탐지 목록을 보여줍니다.
- */
+// 주요 파손 라벨 목록 (도로 유형)
 const DamageReportDashboard: React.FC = () => {
   // React Query를 사용하여 API로부터 파손 데이터 비동기 로드
   const { data, isLoading, isError, refetch } = useQuery({

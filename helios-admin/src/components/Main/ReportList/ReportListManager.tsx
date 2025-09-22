@@ -1,7 +1,4 @@
-/**
- * 관리자 대시보드의 "사용자 신고 현황" 섹션 (실데이터 연동)
- * - 더미(mock) 제거, 실제 API(getReport.ts)로부터 데이터를 받아 렌더링합니다.
- */
+// 신고 리스트 관리자 컴포넌트
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchReportData } from "../../../API/getReport";
