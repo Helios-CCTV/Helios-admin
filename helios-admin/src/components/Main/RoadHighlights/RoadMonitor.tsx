@@ -23,7 +23,7 @@ const LABELS = [
 ] as const;
 
 const CCTVMonitor: React.FC = () => {
-  const { data, isLoading, isError, refetch } = useQuery<AnalyzeItem[]>({
+  const { data, isError, refetch } = useQuery<AnalyzeItem[]>({
     queryKey: ["detections-for-monitor"],
     queryFn: fetchAnalyzeData,
     refetchOnWindowFocus: false,

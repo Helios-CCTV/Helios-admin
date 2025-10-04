@@ -14,9 +14,7 @@ export async function fetchAnalyzeTiming() {
   const startTime = performance.now();
 
   try {
-    const response = await axios.get<APIResponse>(
-      `${API_BASE_URL}analyze/get-analyze`
-    );
+    await axios.get<APIResponse>(`${API_BASE_URL}analyze/get-analyze`);
 
     const endTime = performance.now();
 
