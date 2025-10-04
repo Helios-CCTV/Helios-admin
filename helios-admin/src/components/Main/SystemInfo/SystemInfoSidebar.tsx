@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import type { SystemInfo, AdminInfo } from "../../../types";
-import { mockSystemInfo } from "../../../data/mockData";
+import type { AdminInfo } from "../../../types";
 
 export default function SystemInfoSidebar() {
-  const [systemInfo] = useState<SystemInfo>(mockSystemInfo);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [adminInfo] = useState<AdminInfo>({
     id: "admin-1",
@@ -77,45 +75,6 @@ export default function SystemInfoSidebar() {
           </div>
         </div>
 
-        {/* 오늘의 통계 */}
-        <div className="p-4 border-b border-gray-200">
-          <h4 className="text-sm font-semibold text-gray-700 mb-3">
-            오늘의 활동
-          </h4>
-
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-green-500">✅</span>
-                <span className="text-sm text-gray-600">해결된 신고</span>
-              </div>
-              <span className="text-sm font-semibold text-gray-900">
-                {systemInfo.resolvedToday}건
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-yellow-500">⏳</span>
-                <span className="text-sm text-gray-600">대기 중 신고</span>
-              </div>
-              <span className="text-sm font-semibold text-gray-900">
-                {systemInfo.pendingReports}건
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-blue-500">📊</span>
-                <span className="text-sm text-gray-600">총 신고</span>
-              </div>
-              <span className="text-sm font-semibold text-gray-900">
-                {systemInfo.totalReports}건
-              </span>
-            </div>
-          </div>
-        </div>
-
         {/* 사이드 메뉴 */}
         <div className="p-4">
           <h4 className="text-sm font-semibold text-gray-700 mb-3">
@@ -123,6 +82,11 @@ export default function SystemInfoSidebar() {
           </h4>
 
           <div className="space-y-2">
+            <button className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200">
+              <span className="text-sm font-medium text-gray-700">
+                API 상태
+              </span>
+            </button>
             <button className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200">
               <span className="text-sm font-medium text-gray-700">
                 파손 현황
