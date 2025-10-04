@@ -14,9 +14,7 @@ export async function fetchDetectionTiming() {
   const startTime = performance.now();
 
   try {
-    const response = await axios.get<APIResponse>(
-      `${API_BASE_URL}analyze/get-detected`
-    );
+    await axios.get<APIResponse>(`${API_BASE_URL}analyze/get-detected`);
 
     const endTime = performance.now();
 

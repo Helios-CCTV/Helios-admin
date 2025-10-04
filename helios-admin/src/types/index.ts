@@ -1,4 +1,3 @@
-import { mockRoadDamages } from "./../data/mockData";
 // API 상태 관련 타입
 export interface ApiStatus {
   id: string;

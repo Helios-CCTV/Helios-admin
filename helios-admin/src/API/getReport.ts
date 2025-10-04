@@ -14,9 +14,7 @@ export async function fetchReportTiming() {
   const startTime = performance.now();
 
   try {
-    const response = await axios.get<APIResponse>(
-      `${API_BASE_URL}report/get-all`
-    );
+    await axios.get<APIResponse>(`${API_BASE_URL}report/get-all`);
 
     const endTime = performance.now();
 

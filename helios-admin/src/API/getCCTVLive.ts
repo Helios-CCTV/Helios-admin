@@ -14,7 +14,7 @@ export async function fetchCCTVTiming() {
   const startTime = performance.now();
 
   try {
-    const response = await axios.get<APIResponse>(
+    await axios.get<APIResponse>(
       `${API_BASE_URL}cctv/view?minX=126.734086&minY=33.450701&maxX=129.394978&maxY=38.612242`
     );
 
