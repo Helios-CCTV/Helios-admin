@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { SystemInfo, AdminInfo } from "../../../types";
 import { mockSystemInfo } from "../../../data/mockData";
 
@@ -33,24 +33,6 @@ export default function SystemInfoSidebar() {
       second: "2-digit",
       hour12: false,
     });
-  };
-
-  const getStatusColor = (
-    value: number,
-    thresholds: { good: number; warning: number }
-  ) => {
-    if (value >= thresholds.good) return "text-green-600";
-    if (value >= thresholds.warning) return "text-yellow-600";
-    return "text-red-600";
-  };
-
-  const getProgressBarColor = (
-    value: number,
-    thresholds: { good: number; warning: number }
-  ) => {
-    if (value >= thresholds.good) return "bg-green-500";
-    if (value >= thresholds.warning) return "bg-yellow-500";
-    return "bg-red-500";
   };
 
   return (

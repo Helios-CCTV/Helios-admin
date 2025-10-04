@@ -1,6 +1,5 @@
 import type {
   ApiStatus,
-  DamageReport,
   Report,
   RoadHighlight,
   SystemInfo,
@@ -43,39 +42,6 @@ export const mockApiStatuses: ApiStatus[] = [
     responseTime: 95,
     uptime: 99.7,
     lastChecked: new Date(),
-  },
-];
-
-// Mock Damage Reports
-export const mockDamageReports: DamageReport[] = [
-  {
-    id: "damage-1",
-    location: "영동고속도로 강릉 방향 38km",
-    type: "pothole",
-    severity: "high",
-    status: "in_progress",
-    reportedAt: new Date("2024-12-19T09:30:00"),
-
-    description: "차로 중앙 부근 대형 포트홀 발견, 즉시 수리 필요",
-  },
-  {
-    id: "damage-2",
-    location: "경부고속도로 서울 방향 15km",
-    type: "sign_damage",
-    severity: "medium",
-    status: "reported",
-    reportedAt: new Date("2024-12-19T14:15:00"),
-    description: "도로 표지판 일부 손상",
-  },
-  {
-    id: "damage-3",
-    location: "서해안고속도로 목포 방향 82km",
-    type: "lighting",
-    severity: "critical",
-    status: "completed",
-    reportedAt: new Date("2024-12-18T22:00:00"),
-
-    description: "터널 조명 시설 고장으로 시야 확보 어려움",
   },
 ];
 
@@ -175,7 +141,6 @@ export const mockCCTVCameras: CCTVCamera[] = [
     resolution: "4K",
     coordinates: { lat: 37.5665, lng: 126.978 },
     hasDamage: true,
-    damageReports: [mockDamageReports[0]],
   },
   {
     id: "cctv-002",
@@ -188,7 +153,6 @@ export const mockCCTVCameras: CCTVCamera[] = [
     resolution: "1080p",
     coordinates: { lat: 37.4563, lng: 127.0348 },
     hasDamage: true,
-    damageReports: [mockDamageReports[1]],
   },
   {
     id: "cctv-003",

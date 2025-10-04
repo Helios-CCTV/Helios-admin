@@ -1,4 +1,3 @@
-import React from "react";
 import SystemInfoSidebar from "../../components/Main/SystemInfo/SystemInfoSidebar";
 import ApiStatusMonitor from "../../components/Main/ApiStatus/ApiStatusMonitor";
 import DamageReportDashboard from "../../components/Main/DamageReport/DamageReportDashboard";
