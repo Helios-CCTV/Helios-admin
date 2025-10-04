@@ -48,8 +48,15 @@ const TypeIcon: React.FC<{ damageType: string }> = ({ damageType }) => {
   const getTypeConfig = (k: string) => {
     if (k.includes("POTHOLE"))
       return { label: "포트홀", color: "text-red-600" };
-    if (k.includes("CRACK")) return { label: "균열", color: "text-orange-600" };
-    if (k.includes("RUT")) return { label: "러팅", color: "text-yellow-600" };
+    if (k.includes("CRACK")) return { label: "균열", color: "text-red-600" };
+    if (k.includes("SETTLEMENT"))
+      return { label: "침하", color: "text-red-600" };
+    if (k.includes("SINKHOLE")) return { label: "함몰", color: "text-red-600" };
+    if (k.includes("CONSTRUCTION_CRACK"))
+      return { label: "시공균열", color: "text-red-600" };
+    if (k.includes("ALLIGATOR_CRACK"))
+      return { label: "거북등", color: "text-red-600" };
+    if (k.includes("SHOVING")) return { label: "쇼빙", color: "text-red-600" };
     return { label: damageType || "기타", color: "text-gray-600" };
   };
   const cfg = getTypeConfig(t);
